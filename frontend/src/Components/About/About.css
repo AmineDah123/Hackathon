@@ -1,0 +1,97 @@
+/* About Section */
+.about-section{
+  background: linear-gradient(90deg,#000000,#82c3ec6a,#000000);
+  color: white;
+  padding: 100px 80px;
+}
+
+.about-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 70px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Image */
+.about-image img{
+  width: 500px;
+  border-radius: 20px;
+ 
+}
+
+
+.about-text h2 .first-letter{
+  color: #82c3EC; /* اللون الأزرق للحرف الأول */
+  
+}
+
+/* Text */
+.about-text{
+  max-width: 600px;
+}
+
+.about-text h2{
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.about-text p{
+  font-size: 18px;
+  line-height: 1.6;
+}
+.about-text button{
+  margin-top:40px;
+  padding: 20px 40px; /* أكبر حجم للزر */
+  background: linear-gradient(90deg,#504A99,#82c3EC);
+  border:none;
+  border-radius:12px;
+  color:white;
+  font-size:22px; /* كبير وواضح */
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.about-text button:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+.hackathon-stats{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
+  width: 100%;
+}
+
+.stat{
+  text-align:center;
+}
+
+.stat h3{
+  color:#82c3EC;
+  font-size:52px;
+  margin:0;
+}
+
+.stat span{
+  font-size:30px;
+  color:#cccccc7b;
+}
+/* Responsive */
+@media(max-width: 1024px){
+  .about-container{
+    flex-direction: column-reverse; /* النص فوق الصورة في الشاشات الصغيرة */
+    text-align: center;
+  }
+  .about-image img{
+    width: 80%;
+  }
+  .about-text{
+    max-width: 100%;
+  }
+}
