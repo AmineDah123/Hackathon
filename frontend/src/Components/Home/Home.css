@@ -96,24 +96,93 @@
 }
 
 /* HERO TEXT */
-.hero-text h1{
-  font-size: 80px;
-  font-weight: 800;
-  line-height: 1.1;
-  text-transform: capitalize; /* تبقى بقية الكلمات عادية */
+.hero-text h1 {
+  font-size: 74px;
+  font-weight: 900;
+  line-height: 1.08;
   color: white;
+  margin: 0;
 }
 
-.hero-text h1 .first-letter{
-  color: #82c3EC; /* اللون الأزرق للحرف الأول */
+.hero-text h1 .first-letter {
+  color: #82c3EC;
 }
 
-.hero-text p{
-  font-size: 26px; /* نص أكبر */
-  margin-top:20px;
+.hero-accent {
+  display: block;
+  background: linear-gradient(90deg, #82c3EC, #a78bfa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 80px;
+}
+
+/* Mission pill */
+.mission-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  background: rgba(130, 195, 236, 0.1);
+  border: 1px solid rgba(130, 195, 236, 0.3);
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #82c3EC;
+}
+
+.mission-dot {
+  width: 7px;
+  height: 7px;
+  background: #82c3EC;
+  border-radius: 50%;
+  animation: pulse 1.8s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}
+
+.hero-sub {
+  font-size: 20px;
+  max-width: 540px;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+}
+
+.hero-sub strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Hackathon topic tags */
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-tag {
+  padding: 6px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.3px;
+}
+
+/* legacy p (keep gap working) */
+.hero-text p {
+  font-size: 20px;
   max-width: 600px;
-  line-height:1.5;
-
+  line-height: 1.6;
+  margin: 0;
 }
 .hero-text{
     display:flex;
@@ -141,31 +210,18 @@
 }
 
 /* Responsive */
-@media (max-width: 1024px){
-  .hero-text h1{
-    font-size: 60px;
-  }
-  .hero-text p{
-    font-size: 22px;
-  }
-  .hero-text button{
-    font-size:20px;
-    padding: 16px 32px;
-  }
+@media (max-width: 1024px) {
+  .hero-text h1  { font-size: 54px; }
+  .hero-accent   { font-size: 58px; }
+  .hero-text p   { font-size: 18px; }
+  .hero-sub      { font-size: 18px; }
+  .hero-text button { font-size: 20px; padding: 16px 32px; }
 }
 
-@media (max-width: 768px){
-  .content{
-    padding:40px 20px;
-  }
-  .hero-text h1{
-    font-size: 45px;
-  }
-  .hero-text p{
-    font-size:18px;
-  }
-  .hero-text button{
-    font-size:18px;
-    padding: 14px 28px;
-  }
+@media (max-width: 768px) {
+  .content        { padding: 40px 20px; }
+  .hero-text h1   { font-size: 38px; }
+  .hero-accent    { font-size: 40px; }
+  .hero-sub       { font-size: 16px; }
+  .hero-text button { font-size: 18px; padding: 14px 28px; }
 }

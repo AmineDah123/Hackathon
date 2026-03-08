@@ -9,12 +9,10 @@ const db = require('./db');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// ─── Multer ────────────────────────────────────────────────────────────────────
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = path.join(__dirname, 'uploads');
@@ -29,7 +27,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 100 * 1024 }, // 100 KB max
   fileFilter: (req, file, cb) => {
     if (!file.mimetype.startsWith('image/')) {
       return cb(new Error('Only image files are allowed.'));
@@ -38,12 +36,9 @@ const upload = multer({
   },
 });
 
-const MAX_GROUPS  = 4;
+const MAX_GROUPS = 4;
 const MAX_MEMBERS = 4;
 
-// ══════════════════════════════════════════════════════════════════════════════
-// ROUTES
-// ══════════════════════════════════════════════════════════════════════════════
 
 // GET /api/status
 app.get('/api/status', async (req, res) => {
@@ -71,7 +66,6 @@ app.get('/api/status', async (req, res) => {
   });
 });
 
-// ─── Groups ───────────────────────────────────────────────────────────────────
 
 // GET /api/groups
 app.get('/api/groups', async (req, res) => {
@@ -126,7 +120,6 @@ app.delete('/api/groups/:id', async (req, res) => {
   res.json({ success: true, message: 'Group deleted.' });
 });
 
-// ─── Members ──────────────────────────────────────────────────────────────────
 
 // POST /api/groups/:id/members
 app.post('/api/groups/:id/members', upload.single('photo'), async (req, res) => {
@@ -160,7 +153,7 @@ app.post('/api/groups/:id/members', upload.single('photo'), async (req, res) => 
     `INSERT INTO members (group_id, first_name, last_name, email, phone, school, idea, photo)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     [req.params.id, firstName.trim(), lastName.trim(), email.trim().toLowerCase(),
-     phone.trim(), school.trim(), idea.trim(), photoPath]
+    phone.trim(), school.trim(), idea.trim(), photoPath]
   );
 
   const newCount = Number(count) + 1;
@@ -188,7 +181,6 @@ app.delete('/api/groups/:id/members/:memberId', async (req, res) => {
   res.json({ success: true, message: 'Member removed.' });
 });
 
-// ─── Error handler ─────────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError || err.message === 'Only image files are allowed.') {
     return res.status(400).json({ success: false, message: err.message });
