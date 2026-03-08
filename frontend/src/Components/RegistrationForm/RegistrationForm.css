@@ -1,0 +1,198 @@
+/* RegistrationForm.css */
+
+.reg-section {
+  background-color: #0f172a; /* Dark Navy */
+  min-height: 100vh;
+  padding: 80px 20px;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.containere {
+  max-width: 650px;
+  width: 100%;
+}
+
+/* Titles & Typography */
+.subtitlee {
+  color: #82c3EC;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.main-titlee {
+  font-size: 2.2rem;
+  font-weight: 900;
+  margin-bottom: 40px;
+  text-align: center;
+  background: linear-gradient(135deg, #fff 30%, #82c3EC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Step Card (Glassmorphism) */
+.step-container {
+  background: rgba(30, 41, 59, 0.7); /* Slate 800 with opacity */
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(130, 195, 236, 0.2);
+  border-radius: 28px;
+  padding: 45px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: fadeInSlide 0.6s ease-out;
+}
+
+@keyframes fadeInSlide {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Team Info Header (Step 2) */
+.group-header-info {
+  text-align: left;
+  background: rgba(130, 195, 236, 0.08);
+  padding: 20px;
+  border-radius: 16px;
+  border-left: 4px solid #82c3EC;
+  margin-bottom: 30px;
+}
+
+.group-header-info h3 {
+  font-size: 1.1rem;
+  margin: 0;
+  color: #94a3b8;
+}
+
+.group-header-info span {
+  color: #82c3EC;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* Form Inputs Styling */
+.hack-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.input-group-row {
+  display: flex;
+  gap: 15px;
+}
+
+.hack-form input, 
+.hack-form textarea {
+  width: 100%;
+  padding: 15px 18px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hack-form input:focus, 
+.hack-form textarea:focus {
+  border-color: #82c3EC;
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 0 0 4px rgba(130, 195, 236, 0.15);
+  outline: none;
+}
+
+/* File Upload Section */
+.file-upload {
+  text-align: left;
+}
+
+.file-upload label {
+  display: block;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.file-upload input[type="file"] {
+  background: transparent;
+  border: 1px dashed rgba(148, 163, 184, 0.4);
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* The Nadi Submit Button */
+.submit-btn {
+  background: #82c3EC;
+  color: #0f172a;
+  padding: 18px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px -5px rgba(130, 195, 236, 0.4);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+/* Progress Indicators (The Instagram Story Style) */
+.progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 40px;
+}
+
+.dot {
+  width: 45px;
+  height: 4px;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 10px;
+  transition: all 0.5s ease;
+}
+
+.dot.active {
+  background: #82c3EC;
+  width: 65px;
+  box-shadow: 0 0 12px rgba(130, 195, 236, 0.6);
+}
+
+/* Registration Closed */
+.closed-status {
+  text-align: center;
+  padding: 60px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 24px;
+  border: 1px dashed rgba(248, 113, 113, 0.3);
+}
+
+/* Responsive Fixes */
+@media (max-width: 640px) {
+  .input-group-row {
+    flex-direction: column;
+  }
+  .step-container {
+    padding: 30px 20px;
+  }
+  .main-title {
+    font-size: 1.8rem;
+  }
+}

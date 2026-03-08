@@ -1,6 +1,7 @@
 import './About.css'
 import img1 from '../../assets/img2.png'
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function About() {
 
@@ -52,7 +53,9 @@ function About() {
         Join us for an exciting hackathon where creativity meets technology! Whether you're a seasoned developer or just starting out, this event is the perfect opportunity to collaborate, innovate, and bring your ideas to life. Over the course of 48 hours, teams will work together to solve challenges, build prototypes, and compete for amazing prizes. Don't miss out on this chance to connect with like-minded individuals and make a real impact in the tech community. See you there!
         </p>
 
-        <button>Contact Now</button>
+        
+        <Link to="/contact" className="join-btn"><button>Contact Now</button></Link>                              
+
 
         <div className="hackathon-stats">
 

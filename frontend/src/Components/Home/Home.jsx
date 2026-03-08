@@ -1,4 +1,6 @@
 import './Home.css'
+import { Link } from "react-router-dom";
+
  import Spline from '@splinetool/react-spline';
   function Home() {
      return ( <div className="home">
@@ -21,8 +23,8 @@ import './Home.css'
                            <div className="hero-text">
                              <h1><span className="first-letter">W</span>elcome to Our Hackathon</h1>
                               <p>Build innovative projects with AI & Big Data</p> 
-                              <button>Join Now</button>
-                               </div> 
+                              <Link to="/registrationForm" className="join-btn"><button>Join Now</button></Link>                              
+                              </div> 
                                </div> 
                                </div> ) }
                                export default Home
