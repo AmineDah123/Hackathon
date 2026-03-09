@@ -36,7 +36,7 @@ const upload = multer({
   },
 });
 
-const MAX_GROUPS = 4;
+const MAX_GROUPS = 16;
 const MAX_MEMBERS = 4;
 
 

@@ -1,68 +1,44 @@
 import React, { useState } from 'react';
 import './FAQ.css';
-import { FaChevronDown } from 'react-icons/fa'; // npm install react-icons
+import { FaChevronDown } from 'react-icons/fa';
 
 const faqData = [
   {
-    question: "Who can join the hackathon?",
-    answer: "The event is open to students, developers, designers, and entrepreneurs. Whether you are a coding wizard or a UI/UX enthusiast, as long as you are 18+ and have a passion for innovation, you're in!"
+    question: "Where is the hackathon taking place?",
+    answer: "The event is held in Agadir, Morocco. The exact venue address will be shared with confirmed participants via email one week before the event."
+  },
+  {
+    question: "When does the event start and end?",
+    answer: "The hackathon kicks off on Thursday, May 1st 2026 at 9:00 AM and wraps up on Friday, May 2nd 2026 at 4:00 PM — a full 48-hour experience."
+  },
+  {
+    question: "Who can participate?",
+    answer: "The hackathon is open to students, developers, designers, and tech enthusiasts. The only requirement is a genuine passion for building technology that helps people with disabilities."
+  },
+  {
+    question: "What is the theme of this hackathon?",
+    answer: "This hackathon is 100% focused on assistive technology and accessibility. We challenge you to build solutions that improve the daily lives of people with mobility, vision, hearing, or cognitive disabilities."
   },
   {
     question: "Is there a registration fee?",
-    answer: "No, the hackathon is completely free of charge! We provide the venue, food, and swag. You just need to bring your laptop and your brainpower."
+    answer: "No, participation is completely free. Meals and snacks are provided throughout the event. All you need to bring is your laptop and your ideas."
   },
   {
-    question: "Do I need to have a team before registering?",
-    answer: "Not necessarily! You can register as an individual or a team (up to 4 people). We will organize a team-building session at the start of the event for those looking for partners."
+    question: "How many people can be in a team?",
+    answer: "Each team must have exactly 4 members. All 4 must be registered through the registration form on this website before the deadline."
   },
   {
-    question: "What is the selection process?",
-    answer: "After registration, our team reviews applications based on skills and motivation. You will receive an email confirming if you have been selected to participate."
+    question: "What should I bring to the event?",
+    answer: "Bring your laptop, charger, a valid ID, and anything you need to stay comfortable for 48 hours. The venue will have power outlets, WiFi, and rest areas."
   },
   {
-    question: "What can I build during the event?",
-    answer: "You can build any software or hardware project that fits into one of our tracks (AI, GreenTech, etc.). The project must be started and finished during the 48 hours of the hackathon."
+    question: "Will there be mentors available?",
+    answer: "Yes! Experienced mentors from the tech and accessibility space will be on-site throughout the event to guide your team and give technical feedback."
   },
   {
-    question: "Are there any prizes for the winners?",
-    answer: "Yes! There will be cash prizes for the top 3 teams, along with special awards from our sponsors and potential internship or incubation opportunities."
+    question: "Are there prizes for winning teams?",
+    answer: "Yes, the top teams will receive prizes and recognition. Full prize details will be announced closer to the event date."
   },
-  {
-  question: "Who can participate?",
-    answer: "Open to students, professionals, and tech enthusiasts aged 18+. All backgrounds are welcome!"
-  },
-  {
-    question: "Is it free to join?",
-    answer: "Yes, the event is 100% free! We provide the space, food, and mentorship for all selected teams."
-  },
-  {
-    question: "Do I need a team?",
-    answer: "You can apply solo or as a team of 2-4. If you're solo, we'll help you find a team on Day 1."
-  },
-
-  // Row 2
-  {
-    question: "What should I bring?",
-    answer: "Your laptop, charger, a valid ID, and a positive attitude! A sleeping bag is optional but recommended."
-  },
-  {
-    question: "What are the prizes?",
-    answer: "We have cash prizes for the top 3 teams, sponsor-specific awards, and internship opportunities."
-  },
-  {
-    question: "Can I use AI tools?",
-    answer: "Yes! Tools like ChatGPT and GitHub Copilot are allowed to help you speed up your development process."
-  },
-
-  // Row 3
-  {
-    question: "What can I build?",
-    answer: "Anything that fits our tracks (AI, GreenTech, etc.). It can be a web app, mobile app, or hardware hack."
-  },
-  {
-    question: "Is it an overnight event?",
-    answer: "Yes! It's a non-stop 48-hour marathon. We have dedicated quiet zones for those who need a nap."
-  }
 ];
 
 function FAQ() {
@@ -77,11 +53,11 @@ function FAQ() {
       <div className="container">
         <h2 className="main-title"><span className="first-letter">F</span>REQUENTLY ASKED QUESTIONS</h2>
         <p className="subtitle">ANY QUESTIONS?</p>
-        
+
         <div className="accordion-container">
           {faqData.map((item, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className={`accordion-item ${activeIndex === index ? 'active' : ''}`}
               onClick={() => toggleAccordion(index)}
             >

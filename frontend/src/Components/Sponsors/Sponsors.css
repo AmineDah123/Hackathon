@@ -1,58 +1,246 @@
+/* EventDates — reuses the sponsors-section shell */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 .sponsors-section {
-  background: linear-gradient(40deg,#000000,#82c3ec3d,#000000);
-  padding: 80px 20px;
+  background: #070d1a;
+  padding: 100px 20px;
   color: #fff;
   font-family: 'Inter', sans-serif;
+  text-align: center;
 }
 
-.tier {
-  margin-bottom: 60px;
-}
-
-.tier-label {
-  font-size: 1.1rem;
-  letter-spacing: 2px;
-  margin-bottom: 30px;
-  text-transform: uppercase;
+/* Shared typography (matches rest of site) */
+.sponsors-section .subtitle {
+  color: #82c3ec;
+  font-size: 0.8rem;
   font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
 }
 
-/* Colors for Tiers */
-.gold { color: #fbbf24; } /* Amber/Gold */
-.silver { color: #cbd5e1; } /* Slate/Silver */
-.bronze { color: #a8a29e; } /* Stone/Bronze */
+.sponsors-section .main-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  margin-bottom: 60px;
+  background: linear-gradient(135deg, #fff 40%, #82c3ec 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-.logo-grid {
+.sponsors-section .first-letter { color: #82c3ec; }
+
+/* ─── Dates Grid ───────────────────────────────────────────────────────────── */
+.dates-grid {
   display: flex;
-  flex-wrap: wrap;
+  align-items: stretch;
   justify-content: center;
-  gap: 30px;
+  gap: 0;
+  max-width: 900px;
+  margin: 0 auto 48px;
 }
 
-.logo-card {
-  background: rgba(255, 255, 255, 0.397);
-  border-radius: 16px;
-  padding: 40px;
+/* Date Card */
+.date-card {
+  flex: 1;
+  background: rgba(13, 20, 38, 0.85);
+  border: 1px solid rgba(130, 195, 236, 0.15);
+  border-radius: 24px;
+  padding: 36px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.date-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 60px -15px rgba(130, 195, 236, 0.15);
+}
+
+.date-card--end {
+  background: rgba(130, 195, 236, 0.06);
+  border-color: rgba(130, 195, 236, 0.25);
+}
+
+.date-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  background: rgba(130, 195, 236, 0.12);
+  border: 1px solid rgba(130, 195, 236, 0.3);
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #82c3ec;
+  margin-bottom: 8px;
+}
+
+.date-day {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.date-number {
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, #fff, #82c3ec);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.date-month {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #82c3ec;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.date-divider {
+  width: 40px;
+  height: 2px;
+  background: rgba(130, 195, 236, 0.25);
+  border-radius: 99px;
+  margin: 12px 0;
+}
+
+.date-schedule {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.date-schedule li {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #82c3ec;
+  background: rgba(130, 195, 236, 0.08);
+  padding: 2px 8px;
+  border-radius: 6px;
+  min-width: 44px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* ─── Centre 48H divider ───────────────────────────────────────────────────── */
+.dates-versus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  gap: 12px;
+}
+
+.versus-line {
+  width: 2px;
+  flex: 1;
+  background: linear-gradient(to bottom, transparent, rgba(130,195,236,0.3), transparent);
+}
+
+.versus-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(130, 195, 236, 0.1);
+  border: 2px solid rgba(130, 195, 236, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 280px; /* Bigger for Gold */
-  height: 140px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #82c3ec;
+  letter-spacing: 1px;
+  flex-shrink: 0;
 }
 
-.logo-card.small { width: 200px; height: 100px; padding: 25px; }
-.logo-card.x-small { width: 160px; height: 80px; padding: 15px; }
-
-
-
-.logo-card img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+/* ─── Location Banner ──────────────────────────────────────────────────────── */
+.location-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  background: rgba(13, 20, 38, 0.7);
+  border: 1px solid rgba(130, 195, 236, 0.15);
+  border-radius: 20px;
 }
-.main-title .first-letter {
-  color: #82c3EC; /* اللون الأزرق للحرف الأول */
+
+.location-icon { font-size: 1.4rem; }
+
+.location-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+}
+
+.location-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #334155;
+}
+
+.location-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #e2e8f0;
+}
+
+.location-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(130, 195, 236, 0.3);
+}
+
+/* ─── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .dates-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dates-versus {
+    flex-direction: row;
+    padding: 16px 0;
+  }
+
+  .versus-line {
+    width: auto;
+    height: 2px;
+    flex: 1;
+  }
+
+  .date-card { width: 100%; }
+
+  .location-banner { gap: 16px; }
+  .location-dot { display: none; }
 }

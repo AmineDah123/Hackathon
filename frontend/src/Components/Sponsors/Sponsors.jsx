@@ -1,68 +1,82 @@
 import React from 'react';
 import './Sponsors.css';
 
-const sponsorsData = {
-  gold: [
-    { id: 1, name: "Google Cloud", logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" },
-    { id: 2, name: "AWS", logo: "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" },
-  ],
- silver: [
-    { id: 3, name: "Microsoft", logo: "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" },
-    { id: 4, name: "Intel", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a4/Intel_Logo.svg" }, // Link jdid o stable
-    { id: 5, name: "Meta", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" },
-  ],
-  bronze: [
-    { id: 6, name: "DigitalOcean", logo: "https://upload.wikimedia.org/wikipedia/commons/f/ff/DigitalOcean_logo.svg" },
-    { id: 7, name: "GitHub", logo: "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" },
-  ]
-};
-
-function Sponsors() {
+function EventDates() {
   return (
     <section className="sponsors-section" id="sponsors">
       <div className="container">
-          <h2 className="main-title"><span className="first-letter">O</span>UR VALUABLE SPONSORS</h2>
+        <p className="subtitle">MARK YOUR CALENDAR</p>
+        <h2 className="main-title">
+          <span className="first-letter">E</span>VENT DATES
+        </h2>
 
-        <p className="subtitle">THEY SUPPORT US</p>
-      
-        {/* Gold Tier */}
-        <div className="tier gold-tier">
-          <h3 className="tier-label gold"> GOLD PARTNERS</h3>
-          <div className="logo-grid">
-            {sponsorsData.gold.map(s => (
-              <div key={s.id} className="logo-card">
-                <img src={s.logo} alt={s.name} title={s.name} />
-              </div>
-            ))}
+        <div className="dates-grid">
+
+          {/* Day 1 */}
+          <div className="date-card">
+            <div className="date-badge">DAY 1</div>
+            <div className="date-day">Thursday</div>
+            <div className="date-number">01</div>
+            <div className="date-month">MAY 2026</div>
+            <div className="date-divider" />
+            <ul className="date-schedule">
+              <li><span className="time">09:00</span> Opening Ceremony</li>
+              <li><span className="time">10:00</span> Hacking Begins</li>
+              <li><span className="time">13:00</span> Lunch Break</li>
+              <li><span className="time">18:00</span> Mentorship Sessions</li>
+              <li><span className="time">22:00</span> Midnight Check-in</li>
+            </ul>
+          </div>
+
+          {/* Centre divider */}
+          <div className="dates-versus">
+            <div className="versus-line" />
+            <div className="versus-circle">
+              <span>48H</span>
+            </div>
+            <div className="versus-line" />
+          </div>
+
+          {/* Day 2 */}
+          <div className="date-card date-card--end">
+            <div className="date-badge">DAY 2</div>
+            <div className="date-day">Friday</div>
+            <div className="date-number">02</div>
+            <div className="date-month">MAY 2026</div>
+            <div className="date-divider" />
+            <ul className="date-schedule">
+              <li><span className="time">08:00</span> Final Submissions</li>
+              <li><span className="time">10:00</span> Project Demos</li>
+              <li><span className="time">13:00</span> Jury Deliberation</li>
+              <li><span className="time">15:00</span> Awards Ceremony</li>
+              <li><span className="time">16:00</span> Closing & Farewell</li>
+            </ul>
+          </div>
+
+        </div>
+
+        {/* Location banner */}
+        <div className="location-banner">
+          <span className="location-icon">📍</span>
+          <div className="location-info">
+            <span className="location-label">Venue</span>
+            <span className="location-name">Agadir, Morocco</span>
+          </div>
+          <div className="location-dot" />
+          <div className="location-info">
+            <span className="location-label">Duration</span>
+            <span className="location-name">48 Hours Non-stop</span>
+          </div>
+          <div className="location-dot" />
+          <div className="location-info">
+            <span className="location-label">Format</span>
+            <span className="location-name">In-Person Only</span>
           </div>
         </div>
 
-        {/* Silver Tier */}
-        <div className="tier silver-tier">
-          <h3 className="tier-label silver"> SILVER PARTNERS</h3>
-          <div className="logo-grid">
-            {sponsorsData.silver.map(s => (
-              <div key={s.id} className="logo-card small">
-                <img src={s.logo} alt={s.name} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Bronze Tier */}
-        <div className="tier bronze-tier">
-          <h3 className="tier-label bronze"> BRONZE PARTNERS</h3>
-          <div className="logo-grid">
-            {sponsorsData.bronze.map(s => (
-              <div key={s.id} className="logo-card x-small">
-                <img src={s.logo} alt={s.name} />
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
 }
 
-export default Sponsors;
+export default EventDates;
