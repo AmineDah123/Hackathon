@@ -244,3 +244,8 @@
   .location-banner { gap: 16px; }
   .location-dot { display: none; }
 }
+
+.container h2 .first-letter{
+  color: #82c3EC; /* اللون الأزرق للحرف الأول */
+  
+}

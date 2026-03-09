@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './Tracks.css';
 import { FaBrain, FaLeaf, FaCreditCard, FaShieldAlt, FaTruck, FaGraduationCap } from "react-icons/fa";
 const trackData = [

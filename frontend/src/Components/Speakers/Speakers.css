@@ -93,3 +93,8 @@
   display: block;
   margin-bottom: 4px;
 }
+
+.about-text h2 .first-letter{
+  color: #82c3EC; /* اللون الأزرق للحرف الأول */
+  
+}

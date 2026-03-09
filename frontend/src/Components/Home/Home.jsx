@@ -7,7 +7,7 @@ function Home() {
     <div className="home">
       {/* Robot background */}
       <div className="spline-background">
-        <Spline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
+      <Spline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
       </div>
 
       {/* Content overlay */}
@@ -17,7 +17,7 @@ function Home() {
           <ul className="nav-links">
             <li><a href="#about" className="highlight">About</a></li>
             <li><a href="#speakers">Speakers</a></li>
-            <li><a href="#trackes">Tracks</a></li>
+            <li><a href="#tracks">Tracks</a></li>
             <li><a href="#sponsors">Sponsors</a></li>
             <li><a href="#faq">FAQ</a></li>
           </ul>
@@ -55,4 +55,4 @@ function Home() {
   )
 }
 
-export default Home
+export default Home
