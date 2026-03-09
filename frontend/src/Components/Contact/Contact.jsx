@@ -6,32 +6,32 @@ function Contact() {
   return (
     <section className="contact-section">
       <div className="container">
-        <p className="subtitlee">GET IN TOUCH</p>
-        <h2 className="main-titlee">CONTACT US</h2>
+        <p className="subtitlee">PRENEZ CONTACT</p>
+        <h2 className="main-titlee">CONTACTEZ-NOUS</h2>
 
         <div className="contact-wrapper">
           {/* Form Side */}
           <div className="contact-form-card">
             <form>
               <div className="input-group">
-                <input type="text" placeholder="Your Name" required />
+                <input type="text" placeholder="Votre Nom" required />
               </div>
               <div className="input-group">
-                <input type="email" placeholder="Your Email" required />
+                <input type="email" placeholder="Votre Email" required />
               </div>
               <div className="input-group">
                 <select required>
-                  <option value="">Subject</option>
-                  <option value="participant">Participant Query</option>
-                  <option value="sponsor">Sponsorship</option>
-                  <option value="mentor">Mentorship</option>
-                  <option value="other">Other</option>
+                  <option value="">Sujet</option>
+                  <option value="participant">Question de Participant</option>
+                  <option value="sponsor">Sponsoring</option>
+                  <option value="mentor">Mentorat</option>
+                  <option value="other">Autre</option>
                 </select>
               </div>
               <div className="input-group">
-                <textarea placeholder="How can we help you?" rows="5" required></textarea>
+                <textarea placeholder="Comment pouvons-nous vous aider ?" rows="5" required></textarea>
               </div>
-              <button type="submit" className="submit-btn">SEND MESSAGE</button>
+              <button type="submit" className="submit-btn">ENVOYER LE MESSAGE</button>
             </form>
           </div>
 
@@ -54,8 +54,8 @@ function Contact() {
             <div className="info-item">
               <FaDiscord className="icon" />
               <div>
-                <h4>Community</h4>
-                <p>Join our Discord Server</p>
+                <h4>Communauté</h4>
+                <p>Rejoignez notre serveur Discord</p>
               </div>
             </div>
             <div className="social-links-row">

@@ -5,9 +5,9 @@ const API = '/api';
 
 function RegistrationForm() {
   // ── Server status ────────────────────────────────────────────────────────────
-  const [status,        setStatus]        = useState(null);
+  const [status, setStatus] = useState(null);
   const [statusLoading, setStatusLoading] = useState(true);
-  const [statusError,   setStatusError]   = useState('');
+  const [statusError, setStatusError] = useState('');
 
   // ── Flow: 'group' | 'members' | 'thankyou' ──────────────────────────────────
   const [step, setStep] = useState('group');
@@ -15,17 +15,17 @@ function RegistrationForm() {
   // ── Group info ───────────────────────────────────────────────────────────────
   const [groupName, setGroupName] = useState('');
   const [groupIdea, setGroupIdea] = useState('');
-  const [groupId,   setGroupId]   = useState(null);
+  const [groupId, setGroupId] = useState(null);
 
   // ── Member state ─────────────────────────────────────────────────────────────
   const [memberCount, setMemberCount] = useState(0);
-  const [memberForm,  setMemberForm]  = useState({
+  const [memberForm, setMemberForm] = useState({
     firstName: '', lastName: '', email: '', phone: '', school: '', photo: null,
   });
 
   // ── UI ───────────────────────────────────────────────────────────────────────
   const [loading, setLoading] = useState(false);
-  const [error,   setError]   = useState('');
+  const [error, setError] = useState('');
 
   // ── Fetch status on mount ────────────────────────────────────────────────────
   useEffect(() => {
@@ -34,15 +34,15 @@ function RegistrationForm() {
         const data = await fetch(`${API}/status`).then(r => r.json());
         setStatus(data);
       } catch {
-        setStatusError('Could not reach the server. Is the backend running?');
+        setStatusError('Impossible de joindre le serveur. Le backend est-il en cours d\'exécution ?');
       } finally {
         setStatusLoading(false);
       }
     })();
   }, []);
 
-  const maxMembers  = status?.maxMembers  ?? 4;
-  const maxGroups   = status?.maxGroups   ?? 4;
+  const maxMembers = status?.maxMembers ?? 4;
+  const maxGroups = status?.maxGroups ?? 4;
   const totalGroups = status?.totalGroups ?? 0;
 
   // ── Step 1: Create group ─────────────────────────────────────────────────────
@@ -50,10 +50,10 @@ function RegistrationForm() {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      const res  = await fetch(`${API}/groups`, {
-        method:  'POST',
+      const res = await fetch(`${API}/groups`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ name: groupName.trim() }),
+        body: JSON.stringify({ name: groupName.trim() }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.message || 'Failed to create group.'); return; }
@@ -61,7 +61,7 @@ function RegistrationForm() {
       setStatus(prev => ({ ...prev, totalGroups: (prev?.totalGroups ?? 0) + 1 }));
       setStep('members');
     } catch { setError('Network error. Is the backend running?'); }
-    finally  { setLoading(false); }
+    finally { setLoading(false); }
   };
 
   // ── Step 2: Add member ───────────────────────────────────────────────────────
@@ -70,15 +70,15 @@ function RegistrationForm() {
     setLoading(true); setError('');
     const body = new FormData();
     body.append('firstName', memberForm.firstName);
-    body.append('lastName',  memberForm.lastName);
-    body.append('email',     memberForm.email);
-    body.append('phone',     memberForm.phone);
-    body.append('school',    memberForm.school);
-    body.append('idea',      groupIdea.trim());        // shared idea from Step 1
+    body.append('lastName', memberForm.lastName);
+    body.append('email', memberForm.email);
+    body.append('phone', memberForm.phone);
+    body.append('school', memberForm.school);
+    body.append('idea', groupIdea.trim());        // shared idea from Step 1
     if (memberForm.photo) body.append('photo', memberForm.photo);
 
     try {
-      const res  = await fetch(`${API}/groups/${groupId}/members`, { method: 'POST', body });
+      const res = await fetch(`${API}/groups/${groupId}/members`, { method: 'POST', body });
       const data = await res.json();
       if (!res.ok) { setError(data.message || 'Failed to add member.'); return; }
 
@@ -94,7 +94,7 @@ function RegistrationForm() {
       setMemberForm({ firstName: '', lastName: '', email: '', phone: '', school: '', photo: null });
       e.target.reset();
     } catch { setError('Network error. Is the backend running?'); }
-    finally  { setLoading(false); }
+    finally { setLoading(false); }
   };
 
   // ── Register another group ───────────────────────────────────────────────────
@@ -110,7 +110,7 @@ function RegistrationForm() {
     <section className="reg-section">
       <div className="reg-loader">
         <div className="loader-ring" />
-        <p>Loading…</p>
+        <p>Chargement…</p>
       </div>
     </section>
   );
@@ -128,9 +128,9 @@ function RegistrationForm() {
       <div className="containere">
         <div className="closed-status">
           <span className="closed-icon">🔒</span>
-          <h2 className="main-titlee">Registration Closed</h2>
+          <h2 className="main-titlee">Inscriptions Fermées</h2>
           <p className="subtitlee" style={{ fontSize: '0.9rem' }}>
-            All {maxGroups} groups are registered. See you at the Hackathon!
+            Les {maxGroups} équipes sont inscrites. Rendez-vous au Hackathon !
           </p>
         </div>
       </div>
@@ -145,21 +145,21 @@ function RegistrationForm() {
       <div className="containere">
         <div className="thankyou-wrapper">
           <div className="thankyou-icon">🎉</div>
-          <h2 className="thankyou-title">Thank You for Registering!</h2>
+          <h2 className="thankyou-title">Merci pour votre Inscription !</h2>
           <p className="thankyou-sub">
-            Your team has been successfully enrolled in the Hackathon.<br />
-            We can't wait to see what you build!
+            Votre équipe a été inscrite avec succès au Hackathon.<br />
+            Nous avons hâte de voir ce que vous allez accomplir !
           </p>
           <div className="thankyou-card">
-            <span className="thankyou-label">Team</span>
+            <span className="thankyou-label">Équipe</span>
             <span className="thankyou-team-name">{groupName}</span>
-            <span className="thankyou-label" style={{ marginTop: 12 }}>Project Idea</span>
+            <span className="thankyou-label" style={{ marginTop: 12 }}>Idée de Projet</span>
             <span className="thankyou-idea">{groupIdea}</span>
           </div>
-          <div className="thankyou-badge">✓ Registration Confirmed</div>
+          <div className="thankyou-badge">✓ Inscription Confirmée</div>
           {!status?.closed && (
             <button className="submit-btn" onClick={restart}>
-              Register Another Group
+              Inscrire une Autre Équipe
             </button>
           )}
         </div>
@@ -174,19 +174,19 @@ function RegistrationForm() {
     <section className="reg-section">
       <div className="containere">
         <div className="reg-header">
-          <div className="reg-step-pill">Step 1 of 2</div>
-          <h2 className="main-titlee">Create Your Group</h2>
-          <p className="subtitlee">Slot {totalGroups + 1} of {maxGroups} remaining</p>
+          <div className="reg-step-pill">Étape 1 sur 2</div>
+          <h2 className="main-titlee">Créez Votre Équipe</h2>
+          <p className="subtitlee">Place {totalGroups + 1} sur {maxGroups} restantes</p>
         </div>
 
         <div className="step-container">
           <form className="hack-form" onSubmit={handleCreateGroup}>
 
             <div className="field-group">
-              <label className="field-label">Team Name</label>
+              <label className="field-label">Nom de l'Équipe</label>
               <input
                 type="text"
-                placeholder="e.g. CyberWarriors"
+                placeholder="ex : CyberWarriors"
                 required
                 value={groupName}
                 onChange={(e) => setGroupName(e.target.value)}
@@ -195,10 +195,10 @@ function RegistrationForm() {
             </div>
 
             <div className="field-group">
-              <label className="field-label">Project Idea</label>
-              <p className="field-hint">Describe what your team plans to build. This will be shared across all members.</p>
+              <label className="field-label">Idée de Projet</label>
+              <p className="field-hint">Décrivez ce que votre équipe prévoit de construire. Cela sera partagé avec tous les membres.</p>
               <textarea
-                placeholder="e.g. An app that helps visually impaired users navigate public spaces independently…"
+                placeholder="ex : Une application qui aide les utilisateurs malvoyants à naviguer..."
                 required
                 value={groupIdea}
                 onChange={(e) => setGroupIdea(e.target.value)}
@@ -210,7 +210,7 @@ function RegistrationForm() {
             {error && <div className="form-error">⚠️ {error}</div>}
 
             <button type="submit" className="submit-btn" disabled={loading}>
-              {loading ? 'Creating…' : 'Continue — Add Members →'}
+              {loading ? 'Création en cours…' : 'Continuer — Ajouter des Membres →'}
             </button>
           </form>
         </div>
@@ -225,18 +225,18 @@ function RegistrationForm() {
     <section className="reg-section">
       <div className="containere">
         <div className="reg-header">
-          <div className="reg-step-pill">Step 2 of 2</div>
-          <h2 className="main-titlee">Add Members</h2>
+          <div className="reg-step-pill">Étape 2 sur 2</div>
+          <h2 className="main-titlee">Ajouter des Membres</h2>
         </div>
 
         {/* Group info banner */}
         <div className="group-banner">
           <div className="group-banner-left">
-            <span className="group-banner-label">Team</span>
+            <span className="group-banner-label">Équipe</span>
             <span className="group-banner-name">{groupName}</span>
           </div>
           <div className="group-banner-right">
-            <span className="group-banner-label">Member</span>
+            <span className="group-banner-label">Membre</span>
             <span className="group-banner-count">{memberCount + 1} <span style={{ color: '#475569' }}>/ {maxMembers}</span></span>
           </div>
         </div>
@@ -252,15 +252,15 @@ function RegistrationForm() {
           <form className="hack-form" onSubmit={handleAddMember}>
             <div className="input-group-row">
               <div className="field-group">
-                <label className="field-label">First Name</label>
-                <input type="text" placeholder="First Name" required
+                <label className="field-label">Prénom</label>
+                <input type="text" placeholder="Prénom" required
                   value={memberForm.firstName}
                   onChange={(e) => setMemberForm({ ...memberForm, firstName: e.target.value })}
                   disabled={loading} />
               </div>
               <div className="field-group">
-                <label className="field-label">Last Name</label>
-                <input type="text" placeholder="Last Name" required
+                <label className="field-label">Nom</label>
+                <input type="text" placeholder="Nom" required
                   value={memberForm.lastName}
                   onChange={(e) => setMemberForm({ ...memberForm, lastName: e.target.value })}
                   disabled={loading} />
@@ -277,14 +277,14 @@ function RegistrationForm() {
 
             <div className="input-group-row">
               <div className="field-group">
-                <label className="field-label">Phone</label>
+                <label className="field-label">Téléphone</label>
                 <input type="tel" placeholder="+212 6XX XXX XXX" required
                   value={memberForm.phone}
                   onChange={(e) => setMemberForm({ ...memberForm, phone: e.target.value })}
                   disabled={loading} />
               </div>
               <div className="field-group">
-                <label className="field-label">School / Establishment</label>
+                <label className="field-label">École / Établissement</label>
                 <input type="text" placeholder="ENSIAS, INPT…" required
                   value={memberForm.school}
                   onChange={(e) => setMemberForm({ ...memberForm, school: e.target.value })}
@@ -293,14 +293,14 @@ function RegistrationForm() {
             </div>
 
             <div className="field-group">
-              <label className="field-label">Profile Photo</label>
-              <p className="field-hint">⚠ Max 100 KB — JPG or PNG</p>
+              <label className="field-label">Photo de Profil</label>
+              <p className="field-hint">⚠ Max 100 Ko — JPG ou PNG</p>
               <div className="file-drop">
                 <input type="file" accept="image/*" required
                   onChange={(e) => setMemberForm({ ...memberForm, photo: e.target.files[0] })}
                   disabled={loading} />
                 <span className="file-drop-text">
-                  {memberForm.photo ? `📎 ${memberForm.photo.name}` : '📁 Click to upload photo'}
+                  {memberForm.photo ? `📎 ${memberForm.photo.name}` : '📁 Cliquez pour télécharger une photo'}
                 </span>
               </div>
             </div>
@@ -309,10 +309,10 @@ function RegistrationForm() {
 
             <button type="submit" className="submit-btn" disabled={loading}>
               {loading
-                ? 'Saving…'
+                ? 'Enregistrement…'
                 : memberCount + 1 === maxMembers
-                  ? '🎉 Submit & Complete Group'
-                  : `Save Member ${memberCount + 1} →`}
+                  ? '🎉 Soumettre et Terminer l\'Équipe'
+                  : `Enregistrer le Membre ${memberCount + 1} →`}
             </button>
           </form>
         </div>

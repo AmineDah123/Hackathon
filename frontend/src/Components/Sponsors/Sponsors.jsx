@@ -5,26 +5,26 @@ function EventDates() {
   return (
     <section className="sponsors-section" id="sponsors">
       <div className="container">
-        <p className="subtitle">MARK YOUR CALENDAR</p>
+        <p className="subtitle">MARQUEZ VOS CALENDRIERS</p>
         <h2 className="main-title">
-          <span className="first-letter">E</span>VENT DATES
+          <span className="first-letter">D</span>ATES DE L'ÉVÉNEMENT
         </h2>
 
         <div className="dates-grid">
 
           {/* Day 1 */}
           <div className="date-card">
-            <div className="date-badge">DAY 1</div>
-            <div className="date-day">Thursday</div>
+            <div className="date-badge">JOUR 1</div>
+            <div className="date-day">Jeudi</div>
             <div className="date-number">01</div>
-            <div className="date-month">MAY 2026</div>
+            <div className="date-month">MAI 2026</div>
             <div className="date-divider" />
             <ul className="date-schedule">
-              <li><span className="time">09:00</span> Opening Ceremony</li>
-              <li><span className="time">10:00</span> Hacking Begins</li>
-              <li><span className="time">13:00</span> Lunch Break</li>
-              <li><span className="time">18:00</span> Mentorship Sessions</li>
-              <li><span className="time">22:00</span> Midnight Check-in</li>
+              <li><span className="time">09:00</span> Cérémonie d'ouverture</li>
+              <li><span className="time">10:00</span> Début du Hackathon</li>
+              <li><span className="time">13:00</span> Pause Déjeuner</li>
+              <li><span className="time">18:00</span> Sessions de Mentorat</li>
+              <li><span className="time">22:00</span> Pointage de Minuit</li>
             </ul>
           </div>
 
@@ -39,17 +39,17 @@ function EventDates() {
 
           {/* Day 2 */}
           <div className="date-card date-card--end">
-            <div className="date-badge">DAY 2</div>
-            <div className="date-day">Friday</div>
+            <div className="date-badge">JOUR 2</div>
+            <div className="date-day">Vendredi</div>
             <div className="date-number">02</div>
-            <div className="date-month">MAY 2026</div>
+            <div className="date-month">MAI 2026</div>
             <div className="date-divider" />
             <ul className="date-schedule">
-              <li><span className="time">08:00</span> Final Submissions</li>
-              <li><span className="time">10:00</span> Project Demos</li>
-              <li><span className="time">13:00</span> Jury Deliberation</li>
-              <li><span className="time">15:00</span> Awards Ceremony</li>
-              <li><span className="time">16:00</span> Closing & Farewell</li>
+              <li><span className="time">08:00</span> Soumissions Finales</li>
+              <li><span className="time">10:00</span> Démos des Projets</li>
+              <li><span className="time">13:00</span> Délibération du Jury</li>
+              <li><span className="time">15:00</span> Cérémonie de Remise des Prix</li>
+              <li><span className="time">16:00</span> Clôture et Au revoir</li>
             </ul>
           </div>
 
@@ -59,18 +59,18 @@ function EventDates() {
         <div className="location-banner">
           <span className="location-icon">📍</span>
           <div className="location-info">
-            <span className="location-label">Venue</span>
-            <span className="location-name">Agadir, Morocco</span>
+            <span className="location-label">Lieu</span>
+            <span className="location-name">Agadir, Maroc</span>
           </div>
           <div className="location-dot" />
           <div className="location-info">
-            <span className="location-label">Duration</span>
-            <span className="location-name">48 Hours Non-stop</span>
+            <span className="location-label">Durée</span>
+            <span className="location-name">48 Heures Non-stop</span>
           </div>
           <div className="location-dot" />
           <div className="location-info">
             <span className="location-label">Format</span>
-            <span className="location-name">In-Person Only</span>
+            <span className="location-name">En présentiel uniquement</span>
           </div>
         </div>
 

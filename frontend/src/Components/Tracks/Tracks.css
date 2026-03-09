@@ -1,7 +1,7 @@
 .tracks-section {
 
-  background: linear-gradient(90deg,#82c3ec6a,#000000,#00000041,#82c3ec6a);
- /* Dark Navy Blue */
+  background: linear-gradient(90deg, #0a192f, #000000, #000000, #0a192f);
+  /* Dark Navy Blue */
   padding: 80px 20px;
   color: #fff;
   font-family: 'Inter', sans-serif;
@@ -30,7 +30,8 @@
 
 /* حرف الأول باللون الأزرق */
 .main-title .first-letter {
-  color: #82c3EC; /* اللون الأزرق للحرف الأول */
+  color: #82c3EC;
+  /* اللون الأزرق للحرف الأول */
 }
 
 .tracks-grid {
@@ -57,12 +58,35 @@
 }
 
 /* Neon Colors for Hover */
-.card-blue:hover { border-color: #82c3ec6a; box-shadow: 0 0 20px #82c3ec6a; }
-.card-green:hover { border-color: #82c3ec6a; box-shadow: 0 0 20px #82c3ec6a; }
-.card-yellow:hover { border-color:#82c3ec6a; box-shadow: 0 0 20px #82c3ec6a; }
-.card-red:hover { border-color:#82c3ec6a; box-shadow: 0 0 20px #82c3ec6a; }
-.card-purple:hover { border-color: #82c3ec6a; box-shadow: 0 0 20px #82c3ec6a; }
-.card-pink:hover { border-color: #82c3ec6a; box-shadow: 0 0 20px #82c3ec6a; }
+.card-blue:hover {
+  border-color: #82c3ec6a;
+  box-shadow: 0 0 20px #82c3ec6a;
+}
+
+.card-green:hover {
+  border-color: #82c3ec6a;
+  box-shadow: 0 0 20px #82c3ec6a;
+}
+
+.card-yellow:hover {
+  border-color: #82c3ec6a;
+  box-shadow: 0 0 20px #82c3ec6a;
+}
+
+.card-red:hover {
+  border-color: #82c3ec6a;
+  box-shadow: 0 0 20px #82c3ec6a;
+}
+
+.card-purple:hover {
+  border-color: #82c3ec6a;
+  box-shadow: 0 0 20px #82c3ec6a;
+}
+
+.card-pink:hover {
+  border-color: #82c3ec6a;
+  box-shadow: 0 0 20px #82c3ec6a;
+}
 
 .card-header {
   display: flex;
