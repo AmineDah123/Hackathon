@@ -21,7 +21,7 @@ function EventDates() {
             <div className="date-divider" />
             <ul className="date-schedule">
               <li><span className="time">09:00</span> Cérémonie d'ouverture</li>
-              <li><span className="time">10:00</span> Début du Hackathon</li>
+              <li><span className="time">10:00</span> Début du Tech for Hope</li>
               <li><span className="time">13:00</span> Pause Déjeuner</li>
               <li><span className="time">18:00</span> Sessions de Mentorat</li>
               <li><span className="time">22:00</span> Pointage de Minuit</li>

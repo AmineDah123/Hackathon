@@ -8,7 +8,7 @@ function Footer() {
       <div className="container footer-content">
         <div className="footer-brand">
           <div className="footer-brand">
-            <h2 className="logo-text">H<span>ACKATHON</span></h2>
+            <h2 className="logo-text">T<span>ECH FOR HOPE</span></h2>
             <p className="footer-description">
               Rejoignez le sprint ultime de 48 heures où les esprits les plus brillants du Maroc se réunissent
               pour résoudre des problèmes concrets. De l'évolution de l'IA aux technologies durables,
@@ -31,7 +31,7 @@ function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()}  Hackathon. Tous droits réservés.</p>
+        <p>&copy; {new Date().getFullYear()}  Tech for Hope. Tous droits réservés.</p>
       </div>
     </footer>
   );

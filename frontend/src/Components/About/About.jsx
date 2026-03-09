@@ -1,5 +1,5 @@
 import './About.css'
-import img1 from '../../assets/img2.png'
+import img1 from '../../assets/tech_for_hope_branding.png'
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -47,7 +47,7 @@ function About() {
 
           <div className="about-text">
 
-            <h2><span className="first-letter">À</span> propos du Hackathon</h2>
+            <h2><span className="first-letter">À</span> propos de Tech for Hope</h2>
 
             <p>
               Rejoignez-nous pour un hackathon unique où la technologie se met au service de l'inclusion ! Que vous soyez développeur, designer ou passionné, cet événement de 48 heures est votre chance de créer des solutions innovantes pour relever les défis quotidiens des personnes en situation de handicap (mobilité, vision, audition, troubles cognitifs). Venez collaborer, concevoir des prototypes impactants et utiliser votre expertise pour faire une véritable différence dans la vie de ceux qui en ont le plus besoin.

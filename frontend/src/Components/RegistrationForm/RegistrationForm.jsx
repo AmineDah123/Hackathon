@@ -130,7 +130,7 @@ function RegistrationForm() {
           <span className="closed-icon">🔒</span>
           <h2 className="main-titlee">Inscriptions Fermées</h2>
           <p className="subtitlee" style={{ fontSize: '0.9rem' }}>
-            Les {maxGroups} équipes sont inscrites. Rendez-vous au Hackathon !
+            Les {maxGroups} équipes sont inscrites. Rendez-vous au Tech for Hope !
           </p>
         </div>
       </div>
@@ -147,7 +147,7 @@ function RegistrationForm() {
           <div className="thankyou-icon">🎉</div>
           <h2 className="thankyou-title">Merci pour votre Inscription !</h2>
           <p className="thankyou-sub">
-            Votre équipe a été inscrite avec succès au Hackathon.<br />
+            Votre équipe a été inscrite avec succès au Tech for Hope.<br />
             Nous avons hâte de voir ce que vous allez accomplir !
           </p>
           <div className="thankyou-card">
