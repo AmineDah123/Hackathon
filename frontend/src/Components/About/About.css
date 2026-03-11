@@ -16,12 +16,67 @@
 }
 
 /* Image */
-.about-image img{
+/* Image Styling m3a l-Animation */
+.about-image img {
   width: 500px;
   border-radius: 20px;
- 
+  /* Zdna had l-ligne bach n-khdmo l-animation */
+  animation: floatAbout 5s ease-in-out infinite; 
+  filter: drop-shadow(0 0 20px rgba(130, 195, 236, 0.2)); /* Glow khfif */
 }
 
+/* Had l-part hiya l-khat (Circle Outline) */
+.about-image::before {
+  content: '';
+  position: absolute;
+  width: 520px;        /* Kber mn tswira chwiya */
+  height: 520px;
+  background: transparent; /* 7iydna l-lon d dakhil */
+  
+  /* L-khat l-zreq r9iq */
+  border: 2px solid rgba(130, 195, 236, 0.4); 
+  border-radius: 50%;
+  
+  /* Bach t-ji nss daira ghir l-foq awla l-teht */
+  /* Hna ghadi n-khlliwha daira kamla walakin n-9t3oha b clip-path */
+  clip-path: inset(50% 0 0 0); /* Hadchi k-i-khlli ghir l-nss l-tehtani bayn */
+  
+  bottom: -10%;       /* Habtnaha chwiya t-7t tswira */
+  z-index: 0;
+  
+  /* Animation dyal l-Orbit */
+  animation: orbitPulse 4s ease-in-out infinite;
+}
+
+
+
+.about-image img {
+  width: 500px;
+  border-radius: 24px;
+  position: relative;
+  z-index: 5; /* Foq ga3 l-khoutout */
+  animation: floatAbout 5s ease-in-out infinite;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
+}
+
+/* Animation dyal l-khat */
+@keyframes orbitPulse {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.05) translateY(-10px);
+    opacity: 0.8;
+    box-shadow: 0 0 20px rgba(130, 195, 236, 0.2);
+  }
+}
+
+/* Animation d tswira */
+@keyframes floatAbout {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-25px); }
+}
 
 .about-text h2 .first-letter{
   color: #82c3EC; /* اللون الأزرق للحرف الأول */
@@ -43,22 +98,25 @@
   font-size: 18px;
   line-height: 1.6;
 }
-.about-text button{
-  margin-top:40px;
-  padding: 20px 40px; /* أكبر حجم للزر */
-  background: linear-gradient(90deg,#504A99,#82c3EC);
-  border:none;
-  border-radius:12px;
-  color:white;
-  font-size:22px; /* كبير وواضح */
-  font-weight:600;
-  cursor:pointer;
-  transition:0.3s;
+/* Join Button */
+.join-btn1 {
+  background: #82c3EC;
+  color: #0f172a;
+  padding: 20px 45px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  border: none;
+  margin-top: 40px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 15px 30px rgba(130, 195, 236, 0.2);
 }
 
-.about-text button:hover{
+.join-btn1:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  background: #ffffff;
+  box-shadow: 0 20px 40px rgba(130, 195, 236, 0.3);
 }
 .hackathon-stats{
   display: flex;

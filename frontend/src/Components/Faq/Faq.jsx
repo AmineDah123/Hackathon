@@ -4,40 +4,36 @@ import { FaChevronDown } from 'react-icons/fa';
 
 const faqData = [
   {
-    question: "Where is the hackathon taking place?",
-    answer: "The event is held in Agadir, Morocco. The exact venue address will be shared with confirmed participants via email one week before the event."
+    question: "Où a lieu le hackathon ?",
+    answer: "L'événement se déroule à Agadir, Maroc. L'adresse exacte du lieu sera partagée avec les participants confirmés par email une semaine avant l'événement."
   },
   {
-    question: "When does the event start and end?",
-    answer: "The hackathon kicks off on Thursday, May 1st 2026 at 9:00 AM and wraps up on Friday, May 2nd 2026 at 4:00 PM — a full 48-hour experience."
+    question: "Quand l'événement commence-t-il et se termine-t-il ?",
+    answer: "Le hackathon débute le jeudi 1er mai 2026 à 9h00 et se termine le vendredi 2 mai 2026 à 16h00 — une expérience complète de 48 heures."
   },
   {
-    question: "Who can participate?",
-    answer: "The hackathon is open to students, developers, designers, and tech enthusiasts. The only requirement is a genuine passion for building technology that helps people with disabilities."
+    question: "Qui peut participer ?",
+    answer: "Le hackathon est ouvert aux étudiants, développeurs, designers et passionnés de technologie. La seule condition est d'avoir une véritable passion pour créer des technologies qui aident les personnes handicapées."
   },
   {
-    question: "What is the theme of this hackathon?",
-    answer: "This hackathon is 100% focused on assistive technology and accessibility. We challenge you to build solutions that improve the daily lives of people with mobility, vision, hearing, or cognitive disabilities."
+    question: "Quel est le thème de ce hackathon ?",
+    answer: "Ce hackathon est 100% axé sur les technologies d'assistance et l'accessibilité. Nous vous mettons au défi de créer des solutions qui améliorent la vie quotidienne des personnes ayant un handicap moteur, visuel, auditif ou cognitif."
   },
   {
-    question: "Is there a registration fee?",
-    answer: "No, participation is completely free. Meals and snacks are provided throughout the event. All you need to bring is your laptop and your ideas."
+    question: "Y a-t-il des frais d'inscription ?",
+    answer: "Non, la participation est entièrement gratuite. Des repas et des collations sont fournis tout au long de l'événement. Vous n'avez besoin d'apporter que votre ordinateur portable et vos idées."
   },
   {
-    question: "How many people can be in a team?",
-    answer: "Each team must have exactly 4 members. All 4 must be registered through the registration form on this website before the deadline."
+    question: "Combien de personnes peuvent être dans une équipe ?",
+    answer: "Chaque équipe doit compter exactement 4 membres. Les 4 doivent être inscrits via le formulaire d'inscription sur ce site web avant la date limite."
   },
   {
-    question: "What should I bring to the event?",
-    answer: "Bring your laptop, charger, a valid ID, and anything you need to stay comfortable for 48 hours. The venue will have power outlets, WiFi, and rest areas."
+    question: "Que dois-je apporter à l'événement ?",
+    answer: "Apportez votre ordinateur portable, chargeur, une pièce d'identité valide et tout ce dont vous avez besoin pour rester à l'aise pendant 48 heures. Le lieu disposera de prises de courant, de WiFi et d'espaces de repos."
   },
   {
-    question: "Will there be mentors available?",
-    answer: "Yes! Experienced mentors from the tech and accessibility space will be on-site throughout the event to guide your team and give technical feedback."
-  },
-  {
-    question: "Are there prizes for winning teams?",
-    answer: "Yes, the top teams will receive prizes and recognition. Full prize details will be announced closer to the event date."
+    question: "Y a-t-il des prix pour les équipes gagnantes ?",
+    answer: "Oui, les meilleures équipes recevront des prix et une reconnaissance. Les détails complets des prix seront annoncés plus près de la date de l'événement."
   },
 ];
 
@@ -51,9 +47,8 @@ function FAQ() {
   return (
     <section className="faq-section" id="faq">
       <div className="container">
-        <h2 className="main-title"><span className="first-letter">F</span>REQUENTLY ASKED QUESTIONS</h2>
-        <p className="subtitle">ANY QUESTIONS?</p>
-
+        <h2 className="main-title"><span className="first-letter">F</span>OIRE AUX QUESTIONS</h2>
+        <p className="subtitle">DES QUESTIONS ?</p>
         <div className="accordion-container">
           {faqData.map((item, index) => (
             <div

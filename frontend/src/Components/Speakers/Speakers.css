@@ -1,5 +1,5 @@
 .speakers-section {
-  background: linear-gradient(20deg,#000000,#82c3ec42,#000000);
+  background: linear-gradient(-20deg,#000000,#82c3ec42,#000000 );
   padding: 100px 20px;
   color: #fff;
   font-family: 'Inter', sans-serif;

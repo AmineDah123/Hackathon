@@ -3,7 +3,15 @@
 
 /* ─── Page ─────────────────────────────────────────────────────────────────── */
 .reg-section {
-  background: #070d1a;
+  /* Hna fin k-t-zid tswira dyalk */
+  background-image: 
+    linear-gradient(rgb(7, 13, 26),rgba(7, 13, 26, 0.523), rgba(134, 137, 142, 0.9)), /* Overlay bach t-ghmeq tswira */
+    url('../../assets/img4.png'); /* Tswira dyalk */
+  
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Bach t-bqa fixe mlli t-scroller */
+  
   min-height: 100vh;
   padding: 70px 20px 100px;
   color: #ffffff;
@@ -12,10 +20,10 @@
   justify-content: center;
   align-items: flex-start;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
-/* Ambient orbs */
+/* Ambient orbs (khllinahom hit k-i-ziydo l-vibe m3a tswira) */
 .reg-section::before,
 .reg-section::after {
   content: '';
@@ -27,15 +35,46 @@
 }
 .reg-section::before {
   width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(130,195,236,0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(130,195,236,0.12) 0%, transparent 70%);
   top: -180px; left: -200px;
 }
-.reg-section::after {
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 70%);
-  bottom: -120px; right: -150px;
+
+/* ─── Step Card (Zdna lih Glassmorphism qwa) ────────────────────────────────── */
+.step-container {
+  background: rgba(13, 20, 38, 0.7); /* Opacity naqsa bach t-ban tswira mn t-7t */
+  backdrop-filter: blur(20px); /* Effect dyal l-zaj m-ghmmeq */
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  padding: 40px;
+  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
+  position: relative;
+  z-index: 2;
 }
 
+/* ─── Baqi l-style (ghadi y-bqa kifma kan ghir n-miziw l-visibility) ───────── */
+
+.containere {
+  max-width: 660px;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.hack-form input,
+.hack-form textarea {
+  background: rgba(7, 13, 26, 0.6); /* Input ta hwa chwiya transparent */
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.hack-form input:focus,
+.hack-form textarea:focus {
+  background: rgba(7, 13, 26, 0.9);
+  border-color: #82c3ec;
+}
 .containere {
   max-width: 660px;
   width: 100%;

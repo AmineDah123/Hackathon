@@ -47,31 +47,34 @@ function About() {
 
   <div className="about-text">
 
-        <h2><span className="first-letter">A</span>bout the Hackathon</h2>
+            <h2><span className="first-letter">À</span> propos de Tech for Hope</h2>
 
-        <p>
-        Join us for an exciting hackathon where creativity meets technology! Whether you're a seasoned developer or just starting out, this event is the perfect opportunity to collaborate, innovate, and bring your ideas to life. Over the course of 48 hours, teams will work together to solve challenges, build prototypes, and compete for amazing prizes. Don't miss out on this chance to connect with like-minded individuals and make a real impact in the tech community. See you there!
-        </p>
+            <p>
+              Rejoignez-nous pour un hackathon unique où la technologie se met au service de l'inclusion ! Que vous soyez développeur, designer ou passionné, cet événement de 48 heures est votre chance de créer des solutions innovantes pour relever les défis quotidiens des personnes en situation de handicap (mobilité, vision, audition, troubles cognitifs). Venez collaborer, concevoir des prototypes impactants et utiliser votre expertise pour faire une véritable différence dans la vie de ceux qui en ont le plus besoin.
+            </p>
 
         
-        <Link to="/contact" className="join-btn"><button>Contact Now</button></Link>                              
+        
+         <Link to="/registrationForm" className="join-btn-wrapper">
+              <button className="join-btn1">Rejoindre le Défi →</button>
+            </Link>                             
 
 
         <div className="hackathon-stats">
 
           <div className="stat">
             <h3>{creativity}%</h3>
-            <span>Creativity</span>
+            <span>Créativité</span>
           </div>
 
           <div className="stat">
             <h3>+{team}</h3>
-            <span>Team</span>
+            <span>Équipes</span>
           </div>
 
           <div className="stat">
             <h3>+{ideas}</h3>
-            <span>Ideas</span>
+            <span>Idées</span>
           </div>
 
         </div>

@@ -6,22 +6,22 @@ const speakersData = [
   {
     id: 1,
     name: "Dr. Amine Benali",
-    role: "Senior AI Researcher @ Google",
-    topic: "The Future of LLMs in North Africa",
+    role: "Chercheur Senior en IA @ Google",
+    topic: "L'Avenir des LLM en Afrique du Nord",
     image: "https://randomuser.me/api/portraits/men/32.jpg" // Replace with real photos
   },
   {
     id: 2,
     name: "Sara Mansouri",
-    role: "Head of Cybersecurity @ TechSafe",
-    topic: "Building Resilient Digital Infrastructures",
+    role: "Responsable Cybersécurité @ TechSafe",
+    topic: "Construire des Infrastructures Numériques Résilientes",
     image: "https://randomuser.me/api/portraits/women/44.jpg"
   },
   {
     id: 3,
     name: "Omar Kadiri",
-    role: "Blockchain Developer @ CryptoPay",
-    topic: "Scaling FinTech with Web3",
+    role: "Développeur Blockchain @ CryptoPay",
+    topic: "Mettre à l'Échelle la FinTech avec le Web3",
     image: "https://randomuser.me/api/portraits/men/46.jpg"
   }
 ];
@@ -30,8 +30,8 @@ function Speakers() {
   return (
     <section className="speakers-section" id="speakers">
       <div className="container">
-        <p className="main-title"><span className="first-letter">E</span>LEARN FROM THE BEST</p>
-        <h2 className="subtitle">OUR GUEST SPEAKERS</h2>
+        <p className="main-title"><span className="first-letter">A</span>PPRENEZ DES MEILLEURS</p>
+        <h2 className="subtitle">NOS INTERVENANTS INVITÉS</h2>
         
         <div className="speakers-grid">
           {speakersData.map((speaker) => (
