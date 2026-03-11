@@ -4,6 +4,7 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const rateLimit = require('express-rate-limit');
 const db = require('./db');
 
 const app = express();
@@ -12,6 +13,42 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Custom error handler for rate limits
+const rateLimitHandler = (req, res) => {
+  res.status(429).json({
+    success: false,
+    message: 'Too many requests from this IP, please try again later.',
+  });
+};
+
+// Global rate limiter - applies to all routes
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: rateLimitHandler,
+  skip: (req) => {
+    const whitelist = process.env.RATE_LIMIT_WHITELIST ? process.env.RATE_LIMIT_WHITELIST.split(',') : [];
+    return whitelist.includes(req.ip || '');
+  },
+});
+
+// Strict limiter for creation operations (groups/members)
+const strictLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 15, // Let's allow 15 attempts per hour for team creation
+  skipSuccessfulRequests: false,
+  message: 'Too many registration attempts, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: rateLimitHandler,
+});
+
+// Apply global limiter to ALL routes
+app.use(globalLimiter);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -36,11 +73,10 @@ const upload = multer({
   },
 });
 
-const MAX_GROUPS = 16;
 const MAX_MEMBERS = 4;
 
 
-// GET /api/status
+// GET /api/status - Uses globalLimiter automatically
 app.get('/api/status', async (req, res) => {
   const [groups] = await db.query(`
     SELECT g.id, g.name, g.created_at, COUNT(m.id) AS member_count
@@ -50,11 +86,13 @@ app.get('/api/status', async (req, res) => {
   `);
 
   const totalGroups = groups.length;
-  const closed = totalGroups >= MAX_GROUPS && groups.every(g => Number(g.member_count) >= MAX_MEMBERS);
+  // We no longer have a maxGroups limit.
+  // Registration is only closed if you want to manually toggle it later,
+  // For now, we'll keep it open.
+  const closed = false;
 
   res.json({
     totalGroups,
-    maxGroups: MAX_GROUPS,
     maxMembers: MAX_MEMBERS,
     closed,
     groups: groups.map(g => ({
@@ -67,7 +105,7 @@ app.get('/api/status', async (req, res) => {
 });
 
 
-// GET /api/groups
+// GET /api/groups - Uses globalLimiter automatically
 app.get('/api/groups', async (req, res) => {
   const [groups] = await db.query('SELECT * FROM `groups`');
   for (const g of groups) {
@@ -78,12 +116,7 @@ app.get('/api/groups', async (req, res) => {
 });
 
 // POST /api/groups
-app.post('/api/groups', async (req, res) => {
-  const [[{ total }]] = await db.query('SELECT COUNT(*) AS total FROM `groups`');
-  if (total >= MAX_GROUPS) {
-    return res.status(400).json({ success: false, message: 'Registration is closed. Maximum groups reached.' });
-  }
-
+app.post('/api/groups', strictLimiter, async (req, res) => {
   const { name } = req.body;
   if (!name || !name.trim()) {
     return res.status(400).json({ success: false, message: 'Group name is required.' });
@@ -91,7 +124,7 @@ app.post('/api/groups', async (req, res) => {
 
   const [[existing]] = await db.query('SELECT id FROM `groups` WHERE LOWER(name) = LOWER(?)', [name.trim()]);
   if (existing) {
-    return res.status(409).json({ success: false, message: 'A group with this name already exists.' });
+    return res.status(409).json({ success: false, message: 'Ce nom d\'équipe est déjà pris. Veuillez en choisir un autre.' });
   }
 
   const [result] = await db.query('INSERT INTO `groups` (name) VALUES (?)', [name.trim()]);
@@ -102,7 +135,7 @@ app.post('/api/groups', async (req, res) => {
   });
 });
 
-// GET /api/groups/:id
+// GET /api/groups/:id - Uses globalLimiter
 app.get('/api/groups/:id', async (req, res) => {
   const [[group]] = await db.query('SELECT * FROM `groups` WHERE id = ?', [req.params.id]);
   if (!group) return res.status(404).json({ success: false, message: 'Group not found.' });
@@ -111,23 +144,41 @@ app.get('/api/groups/:id', async (req, res) => {
   res.json({ success: true, group: { ...group, members } });
 });
 
-// DELETE /api/groups/:id
+// DELETE /api/groups/:id - Uses globalLimiter
 app.delete('/api/groups/:id', async (req, res) => {
   const [[group]] = await db.query('SELECT id FROM `groups` WHERE id = ?', [req.params.id]);
   if (!group) return res.status(404).json({ success: false, message: 'Group not found.' });
 
+  const [members] = await db.query('SELECT photo FROM members WHERE group_id = ?', [req.params.id]);
+
   await db.query('DELETE FROM `groups` WHERE id = ?', [req.params.id]);
+
+  for (const member of members) {
+    if (member.photo) {
+      const photoPath = path.join(__dirname, 'uploads', path.basename(member.photo));
+      fs.unlink(photoPath, () => {});
+    }
+  }
+
   res.json({ success: true, message: 'Group deleted.' });
 });
 
 
 // POST /api/groups/:id/members
-app.post('/api/groups/:id/members', upload.single('photo'), async (req, res) => {
+app.post('/api/groups/:id/members', strictLimiter, upload.single('photo'), async (req, res) => {
+  const cleanupUpload = () => {
+    if (req.file && req.file.path) fs.unlink(req.file.path, () => {});
+  };
+
   const [[group]] = await db.query('SELECT * FROM `groups` WHERE id = ?', [req.params.id]);
-  if (!group) return res.status(404).json({ success: false, message: 'Group not found.' });
+  if (!group) {
+    cleanupUpload();
+    return res.status(404).json({ success: false, message: 'Group not found.' });
+  }
 
   const [[{ count }]] = await db.query('SELECT COUNT(*) AS count FROM members WHERE group_id = ?', [req.params.id]);
   if (Number(count) >= MAX_MEMBERS) {
+    cleanupUpload();
     return res.status(400).json({ success: false, message: 'This group is already full (4 members).' });
   }
 
@@ -136,6 +187,7 @@ app.post('/api/groups/:id/members', upload.single('photo'), async (req, res) => 
     .filter(f => !req.body[f] || !req.body[f].trim());
 
   if (missing.length) {
+    cleanupUpload();
     return res.status(400).json({ success: false, message: `Missing fields: ${missing.join(', ')}` });
   }
 
@@ -143,9 +195,28 @@ app.post('/api/groups/:id/members', upload.single('photo'), async (req, res) => 
     return res.status(400).json({ success: false, message: 'Profile photo is required.' });
   }
 
-  const [[emailExists]] = await db.query('SELECT id FROM members WHERE LOWER(email) = LOWER(?)', [email.trim()]);
-  if (emailExists) {
-    return res.status(409).json({ success: false, message: 'This email is already registered.' });
+  // ── Duplicate Check ────────────────────────────────────────────────────────
+  // Check if someone with the same email, phone, OR same first+last name already exists
+  const [[existingMember]] = await db.query(
+    `SELECT id, email, phone, first_name, last_name 
+     FROM members 
+     WHERE LOWER(email) = LOWER(?) 
+        OR phone = ? 
+        OR (LOWER(first_name) = LOWER(?) AND LOWER(last_name) = LOWER(?))`,
+    [email.trim(), phone.trim(), firstName.trim(), lastName.trim()]
+  );
+
+  if (existingMember) {
+    cleanupUpload();
+    let reason = 'sont déjà inscrits';
+    if (existingMember.email.toLowerCase() === email.trim().toLowerCase()) {
+      reason = 'Cette adresse e-mail est déjà inscrite';
+    } else if (existingMember.phone === phone.trim()) {
+      reason = 'Ce numéro de téléphone est déjà utilisé';
+    } else {
+      reason = 'Une personne avec ce prénom et ce nom est déjà inscrite';
+    }
+    return res.status(409).json({ success: false, message: reason });
   }
 
   const photoPath = `/uploads/${req.file.filename}`;
@@ -172,16 +243,25 @@ app.post('/api/groups/:id/members', upload.single('photo'), async (req, res) => 
 // DELETE /api/groups/:id/members/:memberId
 app.delete('/api/groups/:id/members/:memberId', async (req, res) => {
   const [[member]] = await db.query(
-    'SELECT id FROM members WHERE id = ? AND group_id = ?',
+    'SELECT id, photo FROM members WHERE id = ? AND group_id = ?',
     [req.params.memberId, req.params.id]
   );
   if (!member) return res.status(404).json({ success: false, message: 'Member not found.' });
 
   await db.query('DELETE FROM members WHERE id = ?', [req.params.memberId]);
+
+  if (member.photo) {
+    const photoPath = path.join(__dirname, 'uploads', path.basename(member.photo));
+    fs.unlink(photoPath, () => {});
+  }
+
   res.json({ success: true, message: 'Member removed.' });
 });
 
 app.use((err, req, res, next) => {
+  if (req.file && req.file.path) {
+    fs.unlink(req.file.path, () => {});
+  }
   if (err instanceof multer.MulterError || err.message === 'Only image files are allowed.') {
     return res.status(400).json({ success: false, message: err.message });
   }
@@ -190,5 +270,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Hackathon API running on http://localhost:${PORT}`);
+  console.log(`Hackathon API running on http://localhost:${PORT}`);
 });

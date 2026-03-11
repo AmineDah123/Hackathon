@@ -42,7 +42,6 @@ function RegistrationForm() {
   }, []);
 
   const maxMembers = status?.maxMembers ?? 4;
-  const maxGroups = status?.maxGroups ?? 4;
   const totalGroups = status?.totalGroups ?? 0;
 
   // ── Step 1: Create group ─────────────────────────────────────────────────────
@@ -130,7 +129,7 @@ function RegistrationForm() {
           <span className="closed-icon">🔒</span>
           <h2 className="main-titlee">Inscriptions Fermées</h2>
           <p className="subtitlee" style={{ fontSize: '0.9rem' }}>
-            Les {maxGroups} équipes sont inscrites. Rendez-vous au Tech for Hope !
+            Les inscriptions sont closes. Rendez-vous au Tech for Hope !
           </p>
         </div>
       </div>
@@ -176,7 +175,7 @@ function RegistrationForm() {
         <div className="reg-header">
           <div className="reg-step-pill">Étape 1 sur 2</div>
           <h2 className="main-titlee">Créez Votre Équipe</h2>
-          <p className="subtitlee">Place {totalGroups + 1} sur {maxGroups} restantes</p>
+          <p className="subtitlee">Équipe #{totalGroups + 1}</p>
         </div>
 
         <div className="step-container">
