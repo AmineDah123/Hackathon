@@ -10,6 +10,10 @@ const db = require('./db');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const catchAsync = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
+
 app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -77,7 +81,7 @@ const MAX_MEMBERS = 4;
 
 
 // GET /api/status - Uses globalLimiter automatically
-app.get('/api/status', async (req, res) => {
+app.get('/api/status', catchAsync(async (req, res) => {
   const [groups] = await db.query(`
     SELECT g.id, g.name, g.created_at, COUNT(m.id) AS member_count
     FROM \`groups\` g
@@ -102,23 +106,25 @@ app.get('/api/status', async (req, res) => {
       full: Number(g.member_count) >= MAX_MEMBERS,
     })),
   });
-});
+}));
 
 
 // GET /api/groups - Uses globalLimiter automatically
-app.get('/api/groups', async (req, res) => {
+app.get('/api/groups', catchAsync(async (req, res) => {
   const [groups] = await db.query('SELECT * FROM `groups`');
+  const [allMembers] = await db.query('SELECT * FROM members');
+  
   for (const g of groups) {
-    const [members] = await db.query('SELECT * FROM members WHERE group_id = ?', [g.id]);
-    g.members = members;
+    g.members = allMembers.filter(m => m.group_id === g.id);
   }
+  
   res.json({ success: true, groups });
-});
+}));
 
 // POST /api/groups
-app.post('/api/groups', strictLimiter, async (req, res) => {
+app.post('/api/groups', strictLimiter, catchAsync(async (req, res) => {
   const { name } = req.body;
-  if (!name || !name.trim()) {
+  if (typeof name !== 'string' || !name.trim()) {
     return res.status(400).json({ success: false, message: 'Group name is required.' });
   }
 
@@ -133,24 +139,25 @@ app.post('/api/groups', strictLimiter, async (req, res) => {
     message: 'Group created.',
     group: { id: result.insertId, name: name.trim(), members: [] },
   });
-});
+}));
 
 // GET /api/groups/:id - Uses globalLimiter
-app.get('/api/groups/:id', async (req, res) => {
+app.get('/api/groups/:id', catchAsync(async (req, res) => {
   const [[group]] = await db.query('SELECT * FROM `groups` WHERE id = ?', [req.params.id]);
   if (!group) return res.status(404).json({ success: false, message: 'Group not found.' });
 
   const [members] = await db.query('SELECT * FROM members WHERE group_id = ?', [req.params.id]);
   res.json({ success: true, group: { ...group, members } });
-});
+}));
 
 // DELETE /api/groups/:id - Uses globalLimiter
-app.delete('/api/groups/:id', async (req, res) => {
+app.delete('/api/groups/:id', catchAsync(async (req, res) => {
   const [[group]] = await db.query('SELECT id FROM `groups` WHERE id = ?', [req.params.id]);
   if (!group) return res.status(404).json({ success: false, message: 'Group not found.' });
 
   const [members] = await db.query('SELECT photo FROM members WHERE group_id = ?', [req.params.id]);
 
+  await db.query('DELETE FROM members WHERE group_id = ?', [req.params.id]);
   await db.query('DELETE FROM `groups` WHERE id = ?', [req.params.id]);
 
   for (const member of members) {
@@ -161,11 +168,11 @@ app.delete('/api/groups/:id', async (req, res) => {
   }
 
   res.json({ success: true, message: 'Group deleted.' });
-});
+}));
 
 
 // POST /api/groups/:id/members
-app.post('/api/groups/:id/members', strictLimiter, upload.single('photo'), async (req, res) => {
+app.post('/api/groups/:id/members', strictLimiter, upload.single('photo'), catchAsync(async (req, res) => {
   const cleanupUpload = () => {
     if (req.file && req.file.path) fs.unlink(req.file.path, () => {});
   };
@@ -184,11 +191,11 @@ app.post('/api/groups/:id/members', strictLimiter, upload.single('photo'), async
 
   const { firstName, lastName, email, phone, school, idea } = req.body;
   const missing = ['firstName', 'lastName', 'email', 'phone', 'school', 'idea']
-    .filter(f => !req.body[f] || !req.body[f].trim());
+    .filter(f => typeof req.body[f] !== 'string' || !req.body[f].trim());
 
   if (missing.length) {
     cleanupUpload();
-    return res.status(400).json({ success: false, message: `Missing fields: ${missing.join(', ')}` });
+    return res.status(400).json({ success: false, message: `Missing fields or invalid format: ${missing.join(', ')}` });
   }
 
   if (!req.file) {
@@ -238,10 +245,10 @@ app.post('/api/groups/:id/members', strictLimiter, upload.single('photo'), async
     member: { id: result.insertId, firstName, lastName, email, phone, school, idea, photo: photoPath },
     group: { id: group.id, name: group.name, memberCount: newCount, full: isFull },
   });
-});
+}));
 
 // DELETE /api/groups/:id/members/:memberId
-app.delete('/api/groups/:id/members/:memberId', async (req, res) => {
+app.delete('/api/groups/:id/members/:memberId', catchAsync(async (req, res) => {
   const [[member]] = await db.query(
     'SELECT id, photo FROM members WHERE id = ? AND group_id = ?',
     [req.params.memberId, req.params.id]
@@ -256,7 +263,7 @@ app.delete('/api/groups/:id/members/:memberId', async (req, res) => {
   }
 
   res.json({ success: true, message: 'Member removed.' });
-});
+}));
 
 app.use((err, req, res, next) => {
   if (req.file && req.file.path) {

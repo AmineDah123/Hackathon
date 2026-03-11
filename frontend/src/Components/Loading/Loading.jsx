@@ -8,7 +8,7 @@ const Preloader = ({ onComplete }) => {
         }, 1500);
 
         return () => clearTimeout(timer);
-    }, [onComplete]);
+    }, []);
 
     return (
         <div className="loader-container">
