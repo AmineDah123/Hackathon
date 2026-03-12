@@ -13,6 +13,7 @@ import Footer from './Components/Footer/Footer'
 import RegistrationForm from './Components/RegistrationForm/RegistrationForm'
 import Loading from './Components/Loading/Loading'
 import Contact from './Components/Contact/Contact'
+import AdminPage from './Components/AdminPage/AdminPage'
 
 function App() {
 
@@ -37,7 +38,7 @@ function App() {
               <Footer />
             </>
           } />
-
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/registrationForm" element={<RegistrationForm />} />
           <Route path="/contact" element={<Contact />} />
 

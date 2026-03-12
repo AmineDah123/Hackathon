@@ -1,0 +1,78 @@
+.admin-container {
+  padding: 40px;
+  background-color: #0f172a;
+  min-height: 100vh;
+  color: #f8fafc;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(130, 195, 236, 0.2);
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+}
+
+.highlight { color: #82c3EC; }
+
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.group-card {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+
+.group-card:hover { transform: translateY(-5px); border-color: #82c3EC; }
+
+.group-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.status-badge.full { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+.status-badge.pending { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+
+.group-project-idea {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.member-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #82c3EC;
+}
+
+.m-name { font-weight: 700; font-size: 0.95rem; margin: 0; }
+.m-school { font-size: 0.8rem; color: #82c3EC; margin: 0; }
+.m-contact { font-size: 0.75rem; color: #64748b; margin: 0; }
