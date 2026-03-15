@@ -44,12 +44,12 @@ function RegistrationForm() {
   const maxMembers = status?.maxMembers ?? 4;
   const totalGroups = status?.totalGroups ?? 0;
 
-  // ── Restore from sessionStorage ──────────────────────────────────────────────
+  // ── Restore from localStorage ──────────────────────────────────────────────
   useEffect(() => {
     const restoreSession = async () => {
-      const savedGroupId = sessionStorage.getItem('groupId');
-      const savedGroupName = sessionStorage.getItem('groupName');
-      const savedGroupIdea = sessionStorage.getItem('groupIdea');
+      const savedGroupId = localStorage.getItem('groupId');
+      const savedGroupName = localStorage.getItem('groupName');
+      const savedGroupIdea = localStorage.getItem('groupIdea');
       
       if (savedGroupId && step === 'group') {
         setGroupId(savedGroupId);
@@ -65,11 +65,11 @@ function RegistrationForm() {
             setMemberCount(data.group.members.length);
             if (data.group.members.length >= maxMembers) {
               setStep('thankyou');
-              sessionStorage.clear();
+              localStorage.clear();
             }
           } else {
             // Group not found anymore (deleted by admin or expired)
-            sessionStorage.clear();
+            localStorage.clear();
             setStep('group');
           }
         } catch (err) {
@@ -93,9 +93,9 @@ function RegistrationForm() {
       const data = await res.json();
       if (!res.ok) { setError(data.message || 'Failed to create group.'); return; }
       setGroupId(data.group.id);
-      sessionStorage.setItem('groupId', data.group.id);
-      sessionStorage.setItem('groupName', groupName.trim());
-      sessionStorage.setItem('groupIdea', groupIdea.trim());
+      localStorage.setItem('groupId', data.group.id);
+      localStorage.setItem('groupName', groupName.trim());
+      localStorage.setItem('groupIdea', groupIdea.trim());
       setStatus(prev => ({ ...prev, totalGroups: (prev?.totalGroups ?? 0) + 1 }));
       setStep('members');
     } catch { setError('Network error. Is the backend running?'); }
@@ -141,7 +141,7 @@ function RegistrationForm() {
         const st = await fetch(`${API}/status`).then(r => r.json());
         setStatus(st);
         setStep('thankyou');
-        sessionStorage.clear();
+        localStorage.clear();
       }
       setMemberForm({ firstName: '', lastName: '', email: '', phone: '', school: '', photo: null });
       e.target.reset();
@@ -151,7 +151,7 @@ function RegistrationForm() {
 
   // ── Register another group ───────────────────────────────────────────────────
   const restart = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     setGroupName(''); setGroupIdea(''); setGroupId(null);
     setMemberCount(0); setError(''); setStep('group');
   };
