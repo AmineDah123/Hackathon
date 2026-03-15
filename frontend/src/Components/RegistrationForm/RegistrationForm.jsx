@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './RegistrationForm.css';
 
-const API = '/api';
+const API = import.meta.env.VITE_API_URL || '/api';
 
 function RegistrationForm() {
   // ── Server status ────────────────────────────────────────────────────────────
@@ -44,6 +44,42 @@ function RegistrationForm() {
   const maxMembers = status?.maxMembers ?? 4;
   const totalGroups = status?.totalGroups ?? 0;
 
+  // ── Restore from sessionStorage ──────────────────────────────────────────────
+  useEffect(() => {
+    const restoreSession = async () => {
+      const savedGroupId = sessionStorage.getItem('groupId');
+      const savedGroupName = sessionStorage.getItem('groupName');
+      const savedGroupIdea = sessionStorage.getItem('groupIdea');
+      
+      if (savedGroupId && step === 'group') {
+        setGroupId(savedGroupId);
+        if (savedGroupName) setGroupName(savedGroupName);
+        if (savedGroupIdea) setGroupIdea(savedGroupIdea);
+        setStep('members');
+        
+        // Fetch current group member count from backend
+        try {
+          const res = await fetch(`${API}/groups/${savedGroupId}`);
+          const data = await res.json();
+          if (res.ok && data.group) {
+            setMemberCount(data.group.members.length);
+            if (data.group.members.length >= maxMembers) {
+              setStep('thankyou');
+              sessionStorage.clear();
+            }
+          } else {
+            // Group not found anymore (deleted by admin or expired)
+            sessionStorage.clear();
+            setStep('group');
+          }
+        } catch (err) {
+          console.error('Failed to restore member count', err);
+        }
+      }
+    };
+    restoreSession();
+  }, [step, maxMembers]);
+
   // ── Step 1: Create group ─────────────────────────────────────────────────────
   const handleCreateGroup = async (e) => {
     e.preventDefault();
@@ -57,6 +93,9 @@ function RegistrationForm() {
       const data = await res.json();
       if (!res.ok) { setError(data.message || 'Failed to create group.'); return; }
       setGroupId(data.group.id);
+      sessionStorage.setItem('groupId', data.group.id);
+      sessionStorage.setItem('groupName', groupName.trim());
+      sessionStorage.setItem('groupIdea', groupIdea.trim());
       setStatus(prev => ({ ...prev, totalGroups: (prev?.totalGroups ?? 0) + 1 }));
       setStep('members');
     } catch { setError('Network error. Is the backend running?'); }
@@ -74,7 +113,20 @@ function RegistrationForm() {
     body.append('phone', memberForm.phone);
     body.append('school', memberForm.school);
     body.append('idea', groupIdea.trim());        // shared idea from Step 1
-    if (memberForm.photo) body.append('photo', memberForm.photo);
+    if (memberForm.photo) {
+      if (memberForm.photo.size > 100 * 1024) {
+        setError('Le fichier est trop volumineux (Max 100 Ko).');
+        setLoading(false);
+        return;
+      }
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'application/pdf'];
+      if (!allowedTypes.includes(memberForm.photo.type)) {
+        setError('Format de fichier non autorisé (Uniquement JPG ou PDF).');
+        setLoading(false);
+        return;
+      }
+      body.append('photo', memberForm.photo);
+    }
 
     try {
       const res = await fetch(`${API}/groups/${groupId}/members`, { method: 'POST', body });
@@ -89,6 +141,7 @@ function RegistrationForm() {
         const st = await fetch(`${API}/status`).then(r => r.json());
         setStatus(st);
         setStep('thankyou');
+        sessionStorage.clear();
       }
       setMemberForm({ firstName: '', lastName: '', email: '', phone: '', school: '', photo: null });
       e.target.reset();
@@ -98,6 +151,7 @@ function RegistrationForm() {
 
   // ── Register another group ───────────────────────────────────────────────────
   const restart = () => {
+    sessionStorage.clear();
     setGroupName(''); setGroupIdea(''); setGroupId(null);
     setMemberCount(0); setError(''); setStep('group');
   };
@@ -295,8 +349,22 @@ function RegistrationForm() {
               <label className="field-label">Photo de Profil</label>
               <p className="field-hint">⚠ Max 100 Ko — JPG ou PNG</p>
               <div className="file-drop">
-                <input type="file" accept="image/*" required
-                  onChange={(e) => setMemberForm({ ...memberForm, photo: e.target.files[0] })}
+                <input type="file" accept=".jpg,.jpeg,application/pdf" required
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      if (file.size > 100 * 1024) {
+                        setError('Le fichier est trop volumineux (Max 100 Ko).');
+                        setMemberForm({ ...memberForm, photo: null });
+                        e.target.value = ''; // Reset input
+                      } else {
+                        setError('');
+                        setMemberForm({ ...memberForm, photo: file });
+                      }
+                    } else {
+                      setMemberForm({ ...memberForm, photo: null });
+                    }
+                  }}
                   disabled={loading} />
                 <span className="file-drop-text">
                   {memberForm.photo ? `📎 ${memberForm.photo.name}` : '📁 Cliquez pour télécharger une photo'}

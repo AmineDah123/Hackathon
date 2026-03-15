@@ -14,7 +14,28 @@ const catchAsync = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 
-app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/jpg', 'application/pdf'];
+const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.pdf'];
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  ...(process.env.CLIENT_URL ? [process.env.CLIENT_URL] : []),
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. curl, Postman) or from allowed list
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS: origin '${origin}' not allowed`));
+    }
+  },
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions)); // Handle preflight for all routes
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -68,16 +89,19 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 100 * 1024 }, // 100 KB max
+  limits: { fileSize: 100 * 1024 },
   fileFilter: (req, file, cb) => {
-    if (!file.mimetype.startsWith('image/')) {
-      return cb(new Error('Only image files are allowed.'));
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (!ALLOWED_MIME_TYPES.includes(file.mimetype) || !ALLOWED_EXTENSIONS.includes(ext)) {
+      return cb(new Error('Only JPG and PDF files are allowed.'));
     }
     cb(null, true);
   },
 });
 
 const MAX_MEMBERS = 4;
+
+
 
 
 // GET /api/status - Uses globalLimiter automatically
@@ -90,9 +114,6 @@ app.get('/api/status', catchAsync(async (req, res) => {
   `);
 
   const totalGroups = groups.length;
-  // We no longer have a maxGroups limit.
-  // Registration is only closed if you want to manually toggle it later,
-  // For now, we'll keep it open.
   const closed = false;
 
   res.json({
@@ -177,18 +198,6 @@ app.post('/api/groups/:id/members', strictLimiter, upload.single('photo'), catch
     if (req.file && req.file.path) fs.unlink(req.file.path, () => {});
   };
 
-  const [[group]] = await db.query('SELECT * FROM `groups` WHERE id = ?', [req.params.id]);
-  if (!group) {
-    cleanupUpload();
-    return res.status(404).json({ success: false, message: 'Group not found.' });
-  }
-
-  const [[{ count }]] = await db.query('SELECT COUNT(*) AS count FROM members WHERE group_id = ?', [req.params.id]);
-  if (Number(count) >= MAX_MEMBERS) {
-    cleanupUpload();
-    return res.status(400).json({ success: false, message: 'This group is already full (4 members).' });
-  }
-
   const { firstName, lastName, email, phone, school, idea } = req.body;
   const missing = ['firstName', 'lastName', 'email', 'phone', 'school', 'idea']
     .filter(f => typeof req.body[f] !== 'string' || !req.body[f].trim());
@@ -202,49 +211,85 @@ app.post('/api/groups/:id/members', strictLimiter, upload.single('photo'), catch
     return res.status(400).json({ success: false, message: 'Profile photo is required.' });
   }
 
-  // ── Duplicate Check ────────────────────────────────────────────────────────
-  // Check if someone with the same email, phone, OR same first+last name already exists
-  const [[existingMember]] = await db.query(
-    `SELECT id, email, phone, first_name, last_name 
-     FROM members 
-     WHERE LOWER(email) = LOWER(?) 
-        OR phone = ? 
-        OR (LOWER(first_name) = LOWER(?) AND LOWER(last_name) = LOWER(?))`,
-    [email.trim(), phone.trim(), firstName.trim(), lastName.trim()]
-  );
+  let connection;
+  try {
+    connection = await db.getConnection();
+    await connection.beginTransaction();
 
-  if (existingMember) {
-    cleanupUpload();
-    let reason = 'sont déjà inscrits';
-    if (existingMember.email.toLowerCase() === email.trim().toLowerCase()) {
-      reason = 'Cette adresse e-mail est déjà inscrite';
-    } else if (existingMember.phone === phone.trim()) {
-      reason = 'Ce numéro de téléphone est déjà utilisé';
-    } else {
-      reason = 'Une personne avec ce prénom et ce nom est déjà inscrite';
+    // ── Group and Capacity Check ───────────────────────────────────────────────
+    // Using FOR UPDATE to lock the group row to prevent race conditions
+    const [[group]] = await connection.query('SELECT * FROM `groups` WHERE id = ? FOR UPDATE', [req.params.id]);
+    if (!group) {
+      await connection.rollback();
+      cleanupUpload();
+      return res.status(404).json({ success: false, message: 'Group not found.' });
     }
-    return res.status(409).json({ success: false, message: reason });
+
+    const [[{ count }]] = await connection.query('SELECT COUNT(*) AS count FROM members WHERE group_id = ?', [req.params.id]);
+    if (Number(count) >= MAX_MEMBERS) {
+      await connection.rollback();
+      cleanupUpload();
+      return res.status(400).json({ success: false, message: 'This group is already full (4 members).' });
+    }
+
+    // ── Duplicate Check ────────────────────────────────────────────────────────
+    const [[existingMember]] = await connection.query(
+      `SELECT id, email, phone, first_name, last_name 
+       FROM members 
+       WHERE LOWER(email) = LOWER(?) 
+          OR phone = ? 
+          OR (LOWER(first_name) = LOWER(?) AND LOWER(last_name) = LOWER(?))`,
+      [email.trim(), phone.trim(), firstName.trim(), lastName.trim()]
+    );
+
+    if (existingMember) {
+      await connection.rollback();
+      cleanupUpload();
+      let reason = 'sont déjà inscrits';
+      if (existingMember.email.toLowerCase() === email.trim().toLowerCase()) {
+        reason = 'Cette adresse e-mail est déjà inscrite';
+      } else if (existingMember.phone === phone.trim()) {
+        reason = 'Ce numéro de téléphone est déjà utilisé';
+      } else {
+        reason = 'Une personne avec ce prénom et ce nom est déjà inscrite';
+      }
+      return res.status(409).json({ success: false, message: reason });
+    }
+
+    // ── Insertion ──────────────────────────────────────────────────────────────
+    const photoPath = `/uploads/${req.file.filename}`;
+    const [result] = await connection.query(
+      `INSERT INTO members (group_id, first_name, last_name, email, phone, school, idea, photo)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [req.params.id, firstName.trim(), lastName.trim(), email.trim().toLowerCase(),
+      phone.trim(), school.trim(), idea.trim(), photoPath]
+    );
+
+    const newCount = Number(count) + 1;
+    const isFull = newCount >= MAX_MEMBERS;
+
+    await connection.query(
+      'UPDATE `groups` SET status = ? WHERE id = ?',
+      [isFull ? 'completed' : 'in progress', req.params.id]
+    );
+
+    await connection.commit();
+
+    res.status(201).json({
+      success: true,
+      message: isFull
+        ? `Group "${group.name}" is now FULL!`
+        : `Member ${newCount} of ${MAX_MEMBERS} added to "${group.name}".`,
+      member: { id: result.insertId, firstName, lastName, email, phone, school, idea, photo: photoPath },
+      group: { id: group.id, name: group.name, memberCount: newCount, full: isFull },
+    });
+  } catch (error) {
+    if (connection) await connection.rollback();
+    cleanupUpload();
+    throw error; // Will be caught by catchAsync
+  } finally {
+    if (connection) connection.release();
   }
-
-  const photoPath = `/uploads/${req.file.filename}`;
-  const [result] = await db.query(
-    `INSERT INTO members (group_id, first_name, last_name, email, phone, school, idea, photo)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [req.params.id, firstName.trim(), lastName.trim(), email.trim().toLowerCase(),
-    phone.trim(), school.trim(), idea.trim(), photoPath]
-  );
-
-  const newCount = Number(count) + 1;
-  const isFull = newCount >= MAX_MEMBERS;
-
-  res.status(201).json({
-    success: true,
-    message: isFull
-      ? `🎉 Group "${group.name}" is now FULL!`
-      : `Member ${newCount} of ${MAX_MEMBERS} added to "${group.name}".`,
-    member: { id: result.insertId, firstName, lastName, email, phone, school, idea, photo: photoPath },
-    group: { id: group.id, name: group.name, memberCount: newCount, full: isFull },
-  });
 }));
 
 // DELETE /api/groups/:id/members/:memberId
@@ -269,7 +314,7 @@ app.use((err, req, res, next) => {
   if (req.file && req.file.path) {
     fs.unlink(req.file.path, () => {});
   }
-  if (err instanceof multer.MulterError || err.message === 'Only image files are allowed.') {
+  if (err instanceof multer.MulterError || err.message === 'Only JPG and PDF files are allowed.') {
     return res.status(400).json({ success: false, message: err.message });
   }
   console.error(err);
