@@ -55,7 +55,7 @@ function About() {
 
         
         
-         <Link to="/registrationForm" className="join-btn-wrapper">
+         <Link to="/admin" className="join-btn-wrapper">
               <button className="join-btn1">Rejoindre le Défi →</button>
             </Link>                             
 
